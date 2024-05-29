@@ -1,26 +1,20 @@
 import React, { createContext, useMemo, useState, useContext } from "react";
 import noop from "lodash/noop";
 
-type SelectedMenu = {
-  id: MenuIds;
-};
-
 type MenuIds = "first" | "second" | "last";
 type Menu = { id: MenuIds; title: string };
+type SelectedMenu = { id: MenuIds };
+type MenuSelected = { selectedMenu: SelectedMenu };
 
 // Додати тип Menu Selected
-type MenuSelected = {
-  selectedMenu: { id: "first" | "second" | "last" };
+type MenuAction = {
+  onSelectedMenu: (SelectedMenu: SelectedMenu) => void;
 };
-
 const MenuSelectedContext = createContext<MenuSelected>({
-  selectedMenu: { id: "first" || "second" || "last" },
+  selectedMenu: { id: "first" },
 });
 
 // Додайте тип MenuAction
-type MenuAction = {
-  onSelectedMenu(SelectedMenu: { id: "first" | "second" | "last" }): void;
-};
 
 const MenuActionContext = createContext<MenuAction>({
   onSelectedMenu: noop,
@@ -69,7 +63,7 @@ function MenuComponent({ menus }: PropsMenu) {
 
   return (
     <>
-      {menus.map((menu: Menu) => (
+      {menus.map((menu) => (
         <div key={menu.id} onClick={() => onSelectedMenu({ id: menu.id })}>
           {menu.title}{" "}
           {selectedMenu.id === menu.id ? "Selected" : "Not selected"}
